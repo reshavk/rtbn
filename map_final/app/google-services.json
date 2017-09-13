@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "32073283019",
+    "firebase_url": "https://realtimenavigation.firebaseio.com",
+    "project_id": "realtimenavigation",
+    "storage_bucket": "realtimenavigation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32073283019:android:6281b0c8630eed1a",
+        "android_client_info": {
+          "package_name": "com.example.saurabh.map_final"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32073283019-kt3a599s0dgeqrua4nf04bjq29rferd9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.saurabh.map_final",
+            "certificate_hash": "06cc6c33b24d16cccab992a035757f5856e25e39"
+          }
+        },
+        {
+          "client_id": "32073283019-j6qph3c678mv6bidm6nhdnindefaqa3d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLUn6jTmGXt3PrCASPGZ20OXv4omBC9x4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32073283019-j6qph3c678mv6bidm6nhdnindefaqa3d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
