@@ -11,11 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <script>
-      var startPos;
+     var startPos;
       window.onload = function() {
         var geoSuccess = function(position) {
             startPos = position;
-            //alert(startPos.coords.latitude+" "+startPos.coords.longitude);
         };
         navigator.geolocation.getCurrentPosition(geoSuccess);
       };
@@ -68,7 +67,7 @@
 
                     <!--<button href = "#four" type="submit" id="find" style="margin-top:12%; margin-left:32%;">Find</button>-->
                       <ul class="actions">
-                        <li><a href="#four" class="button scrolly" id = "find" style="margin-top:52%; margin-left:80%;" onclick="Post()">Find</a></li>
+                        <li><a href="#four" class="button scrolly" id="find" style="margin-top:52%; margin-left:80%;" onclick="Post()">Find</a></li>
                       </ul>
                 </div>
             </div>
@@ -86,6 +85,9 @@
         </div>
       </section>
       <section id = "four" class = "Section_One" >
+	<div class="fly-left" id="nearby_bus">
+		
+	</div>
         <div class="fly-right" id="map">
         <h3 style="color:white;text-align:center;">My Google Maps Demo</h3>
 
@@ -93,7 +95,7 @@
       </section>
 
     <!-- Footer -->
-      <footer id="footer" >
+      <footer id="footer" style="margin-top:3.5%" >
         <div class="inner">
           <h2>Get In Touch</h2>
           <ul class="actions">
@@ -180,35 +182,42 @@ function initMap() {
       route(origin_place_id , destination_place_id, travel_mode,
             directionsService, directionsDisplay);
     });
-
     function route(origin_place_id, destination_place_id, travel_mode,
-                   directionsService, directionsDisplay) {
-      if (!origin_place_id || !destination_place_id) {
-        return;
-      }
-      directionsService.route({
-        origin: {'placeId': origin_place_id},
-        destination: {'placeId': destination_place_id},
-        travelMode: travel_mode
-      }, function(response, status) {
-        if (status === 'OK') {
-          directionsDisplay.setDirections(response);
-        } else {
-          window.alert('Directions request failed due to ' + status);
-        }
-      });
-  }
+                       directionsService, directionsDisplay) {
+                      if (!origin_place_id || !destination_place_id) {
+                        return;
+                      }
+                      directionsService.route({
+                        origin: {'placeId': origin_place_id},
+                        destination: {'placeId': destination_place_id},
+                        travelMode: travel_mode
+                      }, function(response, status) {
+                        if (status === 'OK') {
+                          directionsDisplay.setDirections(response);
+                        } else {
+                          window.alert('Directions request failed due to ' + status);
+                        }
+                      });
+                }
+        
 
-    plot =function()
+    plot =function(data)
           { 
-              
-              var myLatLng = {lat: 18.5204, lng: 73.8567};
-              var marker = new google.maps.Marker({
-                  position: myLatLng,
-                  map: map
-              });
 
-          }
+        		$('#nearby_bus').empty();
+                      for(var i=0; i<data.length/3; i++)
+                		{	
+                			var myLatLng = {lat: parseFloat(data[3*i+1]), lng: parseFloat(data[3*i+2])};
+                			var marker = new google.maps.Marker({
+                                  		position: myLatLng,
+                                  		map: map
+                             		 });
+                			
+                			var out = '<ul><li><a href="#" class="button scolly">'+data[3*i+0]+'</a></ul>';	
+                			$('#nearby_bus').append(out);
+                		}
+        		
+    }
 
     return {
         plot : plot
@@ -227,8 +236,10 @@ function Post()
             type: 'POST',
             success: function (data) {
                
-                console.log(data);
-                initMap().plot();
+                //console.log(data);
+		
+                initMap().plot(data);
+		
                 
             }
             
