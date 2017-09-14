@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
 
 });
 
-var nearby = [][3];
+var nearby = [];
 app.post('/', function(request, response){
     lat = request.body['coords[latitude]'];
     lng = request.body['coords[longitude]'];
@@ -74,7 +74,9 @@ app.post('/', function(request, response){
 
                 console.log(getDistance(lat, lng, x, y));
                 if( getDistance(lat, lng, x, y) <= 5){
-                    nearby.push(id, Lat, Lng);
+                    nearby.push(id);
+                    nearby.push(Lat);
+                    nearby.push(Lng);
                     /*nearby.push(Lat);
                     nearby.push(Lng);*/
                 }
