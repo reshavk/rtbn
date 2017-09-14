@@ -3054,17 +3054,13 @@
 
 /*=========================dropdown end=====================*/
 /*=========================Mode=============================*/
-    .mode{
-    	height: 350px;
-       
-    	margin-top: 10%;
-    }
-
-    .mode-static{
-         
-
-         
-    }
+  #map{
+	margin-right: 1%; 
+	border-radius: 20px;
+	border-width:1px;  
+    border-style:solid;
+	border-color: #f6755e;
+}
     
 
 
