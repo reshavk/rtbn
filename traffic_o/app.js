@@ -42,7 +42,7 @@ var nearby = [];
 app.post('/', function(request, response){
     lat = request.body['coords[latitude]'];
     lng = request.body['coords[longitude]'];
-    console.log(lat + " " + lng);
+    //console.log(lat + " " + lng);
     var get_bus_data;
     return new Promises(function(resolve,reject){
         var ref = db.ref("CurrentLocation");
@@ -60,9 +60,10 @@ app.post('/', function(request, response){
             get_bus_data = result.toJSON();
             return get_bus_data;
         }).then((result)=>{
-            response.send(result);
+            //response.send(result);
             var str = JSON.stringify(result);
             var arr = str.split(/[{'" ,:"'}]+/);
+	    nearby.length = 0;
             for(var i = 1; i< arr.length-1; i++){
                 var id = arr[i++];
                 var Lat = arr[i];
@@ -70,18 +71,18 @@ app.post('/', function(request, response){
                 var Lng = arr[i];
                 var y = parseFloat(arr[i]);
 
-                console.log(x + " " + y);
+                //console.log(x + " " + y);
 
-                console.log(getDistance(lat, lng, x, y));
+                //console.log(getDistance(lat, lng, x, y));
                 if( getDistance(lat, lng, x, y) <= 5){
                     nearby.push(id);
                     nearby.push(Lat);
                     nearby.push(Lng);
-                    /*nearby.push(Lat);
-                    nearby.push(Lng);*/
+                    
                 }
             }
-            console.log(nearby);
+            //console.log(nearby);
+	    response.send(nearby);
             
         })
     })
@@ -107,3 +108,4 @@ function getDistance(lat1, lon1, lat2, lon2){
 function deg2rad(deg){
     return deg * (Math.PI/180)
 }
+
