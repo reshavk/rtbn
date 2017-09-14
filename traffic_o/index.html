@@ -117,12 +117,12 @@
 
   <script>
 
-  
-
+  var origin_place_id = null;
+  var destination_place_id = null;
 
 function initMap() {
-   var origin_place_id = null;
-   var destination_place_id = null;
+
+
    var travel_mode = 'TRANSIT';
    var map = new google.maps.Map(document.getElementById('map'), {
       mapTypeControl: false,
@@ -166,8 +166,8 @@ function initMap() {
       // If the place has a geometry, store its place ID and route if we have
       // the other place ID
       origin_place_id = place.place_id;
-      route(origin_place_id, destination_place_id, travel_mode,
-            directionsService, directionsDisplay);
+      //route(origin_place_id, destination_place_id, travel_mode,
+       //     directionsService, directionsDisplay);
     });
 
     destination_autocomplete.addListener('place_changed', function() {
@@ -179,10 +179,16 @@ function initMap() {
       expandViewportToFitPlace(map, place);
 
       destination_place_id = place.place_id;
-      route(origin_place_id , destination_place_id, travel_mode,
-            directionsService, directionsDisplay);
+
+
+
     });
-    function route(origin_place_id, destination_place_id, travel_mode,
+    
+
+    plot =function(data)
+          { 
+
+                  function route(origin_place_id, destination_place_id, travel_mode,
                        directionsService, directionsDisplay) {
                       if (!origin_place_id || !destination_place_id) {
                         return;
@@ -198,11 +204,10 @@ function initMap() {
                           window.alert('Directions request failed due to ' + status);
                         }
                       });
-                }
+                  }
         
-
-    plot =function(data)
-          { 
+              route(origin_place_id , destination_place_id, travel_mode,
+                 directionsService, directionsDisplay);
 
         		$('#nearby_bus').empty();
                       for(var i=0; i<data.length/3; i++)
