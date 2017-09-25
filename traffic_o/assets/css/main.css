@@ -3001,7 +3001,7 @@
     }
     .fly-right
     {
-    	
+
     	float: right;
     	height: 550px;
     	width: 64%;
@@ -3023,7 +3023,7 @@
     }
 
    .dropdown {
-    
+
     display: inline-block;
    }
 
@@ -3055,13 +3055,13 @@
 /*=========================dropdown end=====================*/
 /*=========================Mode=============================*/
   #map{
-	margin-right: 1%; 
+	margin-right: 1%;
 	border-radius: 20px;
-	border-width:1px;  
+	border-width:1px;
     border-style:solid;
 	border-color: #f6755e;
 }
-    
+
 
 
 /*=========================Mode End=================*/

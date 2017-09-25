@@ -1,4 +1,3 @@
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -7,6 +6,7 @@ var firebase = require("firebase");
 var Promises = require("bluebird");
 var fs = require('fs');
 var https = require('https');
+var PythonShell = require('python-shell');
 
 var options = {
  key: fs.readFileSync('key.pem'),
@@ -38,10 +38,24 @@ app.get('/', function (req, res) {
 
 });
 
+app.get('/bus_info', function (req, res) {
+    res.sendFile('bus_info.html', { root: __dirname  } );
+
+});
+app.get('/graph', function (req, res) {
+    res.sendFile('graph.html', { root: __dirname  } );
+
+});
+app.get('/scatterPlot', function (req, res) {
+    res.sendFile('scatterPlot.html', { root: __dirname  } );
+
+});
+
 var nearby = [];
 app.post('/', function(request, response){
-    lat = request.body['coords[latitude]'];
-    lng = request.body['coords[longitude]'];
+    console.log(request.body);
+    lat = request.body['src_lat'];
+    lng = request.body['src_lng'];
     //console.log(lat + " " + lng);
     var get_bus_data;
     return new Promises(function(resolve,reject){
@@ -63,7 +77,7 @@ app.post('/', function(request, response){
             //response.send(result);
             var str = JSON.stringify(result);
             var arr = str.split(/[{'" ,:"'}]+/);
-	    nearby.length = 0;
+        nearby.length = 0;
             for(var i = 1; i< arr.length-1; i++){
                 var id = arr[i++];
                 var Lat = arr[i];
@@ -82,12 +96,79 @@ app.post('/', function(request, response){
                 }
             }
             //console.log(nearby);
-	    response.send(nearby);
+        response.send(nearby);
             
         })
     })
 
 });
+
+var bus_stops = [],coordinates = [];
+app.post('/bus_info', function(request, response){
+    var id = request.body['bus_id'];
+    var get_route_data;
+    return new Promises(function(resolve,reject){
+        var ref = db.ref("BusRoutes/" + id);
+        ref.once('value', function(result){
+            if(result.val() === undefined){
+                console.log("undefined data");
+                reject();
+            }
+            else{
+                resolve(result.val());
+            }
+        }).then((result)=>{
+            get_route_data = result.toJSON();
+            return get_route_data;
+        }).then((result)=>{
+            //response.send(result);
+            var str = JSON.stringify(result);
+            var arr = str.split(/[{'":,"'}]/);
+            var data = [];
+
+            bus_stops.length = 0;
+            coordinates.length = 0;
+
+            for(var i=0; i<arr.length; i++){
+                if(arr[i] != '')
+                    data.push(arr[i]);
+            }
+            for(var i=2; i<data.length; i+=3){
+                bus_stops.push(data[i]);
+            }
+            for(var i=1; i<data.length; i+=3){
+                coordinates.push(data[i]);
+            }
+            //console.log(bus_stops);
+            //console.log(coordinates);
+
+            //Bar-chart starts
+            var options = {
+                args: [id]
+            };
+            PythonShell.run('histogram.py', options, function (err) {
+                if (err) throw err;
+                console.log('bar-graph script executed');
+            });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+            //Bar-chart ends
+            PythonShell.run('scatterPlot.py', options, function (err) {
+                if (err) throw err;
+                console.log('scatter-plot script executed');
+            }); 
+
+            var res = {
+                "bus_id" : id,
+                "bus_stops" : bus_stops,
+                "coordinates" : coordinates
+            }
+            //console.log(res);
+            response.send(res);
+
+        })
+    }) 
+});
+
+
 
 https.createServer(options, app).listen(3000, function () {
   console.log('Started!');
@@ -108,4 +189,3 @@ function getDistance(lat1, lon1, lat2, lon2){
 function deg2rad(deg){
     return deg * (Math.PI/180)
 }
-
